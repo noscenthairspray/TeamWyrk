@@ -13,9 +13,9 @@ const Chat = () => {
 
     const { user, isAuthenticated } = useAuthState();
     //testing a message already selected
-    // const [selectedMessages, setSelectedMessages] = useState(messages[0]);
+    const [selectedMessages, setSelectedMessages] = useState(messages[0]);
     //testing a message not selected
-    const [selectedMessages, setSelectedMessages] = useState(null);
+    // const [selectedMessages, setSelectedMessages] = useState(null);
     const [numUnreadMessages, setNumUnreadMessages] = useState(1);
 
     // const testingMessagesSelected = true;
