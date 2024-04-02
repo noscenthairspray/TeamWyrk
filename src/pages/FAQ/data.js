@@ -12,7 +12,7 @@ export const questions = [
     body: "While we do not make a profit on the platform, we do charge a 4% service fee to cover credit card processing costs.",
   },
   {
-    title: "How much do I pay Insyders?",
+    title: "How much do I pay Insiders?",
     body: `It’s up to you! As a thank you to our Insiders, we recommend paying for a referral or a resume review. Keep in mind that Insiders are more likely to apply for your request if the price is higher. Our competitors, such as FAANG path and Wall Street Oasis, offer their services at expensive fees of $199 and up. Due to our pricing model, you can trust our platform to give you the most bang for your buck!`,
   },
   {
