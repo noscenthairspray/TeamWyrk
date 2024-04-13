@@ -6,19 +6,27 @@ import { useState } from "react";
 import MessagerBar from "./components/MessagerBar";
 import SideBar from "./components/SideBar";
 
-import {messages} from "./mockData"; //mock data for testing front end
+import {conversations} from "./mockData"; //mock data for testing front end
 import ChatBox from "./components/ChatBox";
 
 const Chat = () => {
 
     const { user, isAuthenticated } = useAuthState();
     //testing a message already selected
-    const [selectedMessages, setSelectedMessages] = useState(messages[0]);
+    // const [selectedConversation, setSelectedConversation] = useState(conversations[0]);
     //testing a message not selected
-    // const [selectedMessages, setSelectedMessages] = useState(null);
-    const [numUnreadMessages, setNumUnreadMessages] = useState(1);
 
-    // const testingMessagesSelected = true;
+
+    const [selectedConversation, setSelectedConversation] = useState(null);
+    
+    //getting the number of unread messages
+    let unreadMessages = 0;
+    conversations.forEach((conversation) => {
+        if(!conversation.lastMessageRead){
+            unreadMessages++;
+        }
+    });
+    const [numUnreadMessages, setNumUnreadMessages] = useState(unreadMessages);
 
 
 
@@ -31,10 +39,14 @@ const Chat = () => {
             <div className={styles.title}>
             <Header color="darkBlue">Messages</Header>
             </div>
-            <MessagerBar activeMessages={selectedMessages} numUnreadMessages={numUnreadMessages} />
+            <MessagerBar activeMessages={selectedConversation} numUnreadMessages={numUnreadMessages} />
             <div className={styles.sideAndBlobContainer}>
-                <SideBar messages={messages} />
-                <ChatBox />
+                <SideBar 
+                    conversations={conversations} 
+                    selectedConversation={selectedConversation}
+                    setSelectedConversation={setSelectedConversation}
+                />
+                <ChatBox messages={selectedConversation}/>
             </div>
         </div>
 )

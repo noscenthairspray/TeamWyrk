@@ -1,10 +1,23 @@
 import styles from "./SideBar.module.css";
+import ConversationCard from "./ConversationCard";
 
-const SideBar = () => {
+const SideBar = ({conversations, selectedConversation, setSelectedConversation}) => {
+
+  // const click = (conversation) => {
+
   return (
-    <div className={styles.sideBarWrapper}>
-        SideBar
-    </div>
+    <aside className={styles.sideBarWrapper}>
+        <div className={styles.sideBarAllChats}>
+            {conversations.map((conversation, index) => 
+              <ConversationCard 
+                conversation={conversation} 
+                key={index}
+                currentlyActive={selectedConversation === conversation} 
+                setSelectedConversation={setSelectedConversation}  
+              />
+            )}
+        </div>
+    </aside>
   )
 }
 

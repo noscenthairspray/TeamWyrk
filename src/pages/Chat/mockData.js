@@ -1,5 +1,5 @@
 //mock data for testing front end
-export const messages = [
+export const conversations = [
     {
         id: 1,
         name: "Person A",
@@ -54,7 +54,7 @@ export const messages = [
                 "timestamp": "2023-10-01T12:01:00Z"
             }
         ],
-        lastMessageRead: true,
+        lastMessageRead: false,
         relationship: "Design Requester",
         image: "/images/landing_page/al_avatar.png",
     },
@@ -90,12 +90,22 @@ export const messages = [
             {
                 "id": 2,
                 "content": "Hellooooo",
-                "timestamp": "2023-10-01T12:01:00Z"
+                "timestamp": "2024-02-01T12:01:00Z"
             }
         ],
         lastMessageRead: false,
         relationship: "SWE Requester",
         image: "/images/landing_page/arron_avatar.png",
+    },
+    //test case no messages
+    {
+        id: 5,
+        name: "Ash Ketchem",
+        messages: [
+        ],
+        lastMessageRead: true,
+        relationship: "SWE Requester",
+        image: "/images/landing_page/al_avatar.png",
     },
 
 
