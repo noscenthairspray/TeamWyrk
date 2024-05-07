@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, query, getDocs, doc, updateDoc, where } from "firebase/firestore";
 import { db, auth } from "../../../firebase";
 import { useAuthState } from "../../../hooks/useAuthState";
+import { Navigate } from "react-router-dom";
 import {
   InsiderFeedLayout,
   InsiderRequestFeedItem,
@@ -100,6 +101,12 @@ const InsiderFeed = () => {
   useEffect(() => {
     fetchRequests();
   }, [tab]);
+
+    // Checks for authentication. Redirects to homepage if not
+    if (!isAuthenticated) {
+      return <Navigate replace to="/" />;
+    }
+  
 
   return (
       <InsiderFeedLayout tab={tab} setTab={setTab}>

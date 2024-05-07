@@ -108,6 +108,15 @@ const GetMatchedModal = ({
         // Error sending mail
       }
       updateRequest(docRef);
+
+      //TODO: update the userConversationLogs by creating a new conversation between the two users
+
+      //create a new conversation (with a unique id) 
+      
+      //update the userConversationLogs of the user who accepted the request (the self user aka the  aka from auth useAuthState hook)
+
+      //update the userConversationLogs of the user who made the request (from userContacts prop)
+
     } else {
       // docSnap.data() will be undefined in this case
     }
