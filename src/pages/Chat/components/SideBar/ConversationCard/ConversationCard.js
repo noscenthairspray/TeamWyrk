@@ -21,12 +21,29 @@ const ConversationCard = ({conversation, currentlyActive, setSelectedConversatio
 
     //convert time to Month Day from timestamp
     const month = lastMessageTime.toLocaleString('default', { month: 'short' });
+    //get the month number
+    const monthNumber = lastMessageTime.getMonth();
     const day = lastMessageTime.getDate();
     const year = lastMessageTime.toLocaleDateString('en', {year: '2-digit'});
     //check if year is current year
     const currentYear = new Date().toLocaleDateString('en', {year: '2-digit'});
-    //if year is current year, don't display year
-    const lastMessageTimeFormatted = `${month} ${day} ${year === currentYear ? '' : `'${year}`}`;
+    //check if it is the current day
+    const currentDay = new Date().getDate();
+    //check if it is the current month
+    const currentMonth = new Date().toLocaleString('default', { month: 'short' });
+
+    let lastMessageTimeFormatted;
+    //if it is the current day, month and year
+    if(currentYear === year && currentDay === day && currentMonth === month){
+        lastMessageTimeFormatted = lastMessageTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    }
+    //else if it is the current year
+    else if(currentYear === year){
+        lastMessageTimeFormatted = `${month} ${day}`;
+    }
+    else{
+        lastMessageTimeFormatted = `${monthNumber+1}/${day}/${year}`;
+    }
 
     return (
         <div 
