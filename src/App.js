@@ -12,6 +12,7 @@ import Account from "./pages/Account";
 import InsiderFeed from "./pages/RequestPage/InsiderFeed";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import { RequesterFeed, RequesterForm } from "./pages/RequestPage";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/request/form" element={<RequesterForm />} />
               <Route path="/request-insider" element={<InsiderFeed />} />
               <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/chat" element={<Chat />} />
             </Route>
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />

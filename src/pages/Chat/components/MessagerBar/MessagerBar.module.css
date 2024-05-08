@@ -1,0 +1,28 @@
+.msgBarText {
+    color: #222f65;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 24px;
+
+}
+
+.msgBarWrapper{
+    /* display: flex; */
+    padding: 16px 0px;
+    align-items: center;
+    /* gap: 8px; */
+    flex: 1 0 0;
+}
+
+.msgBar {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #EFF2FC;
+    border-radius: 9px 9px 0 0;
+    border-bottom: 1px solid #DEDEDE;
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+}

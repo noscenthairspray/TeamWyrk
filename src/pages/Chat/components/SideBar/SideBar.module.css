@@ -1,0 +1,26 @@
+:root{
+    --blue-Fill: #EFF2FC;
+    --secondary: #DEDEDE;
+    --dark-blue-header: #222F65;
+    --light-grey: #515151;
+    --red: #D62B28;
+}
+
+.sideBarWrapper{
+    display: flex;
+    width: 349px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    /* to visualize for testing */
+    /* border: 1px solid green; */
+}
+
+.sideBarAllChats{
+    display: flex;
+    width: 349px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border: 1px solid var(--blue-Fill);
+}

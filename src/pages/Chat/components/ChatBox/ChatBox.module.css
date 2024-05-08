@@ -1,0 +1,10 @@
+.chatBoxWrapper{
+    display: flex;
+    padding: 32px;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    /* to visualize for testing */
+    /* border: 1px solid red; */
+}
