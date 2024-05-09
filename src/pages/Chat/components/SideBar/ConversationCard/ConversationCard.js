@@ -53,8 +53,20 @@ const ConversationCard = ({conversation}) => {
     const year = lastMessageTime.toLocaleDateString('en', {year: '2-digit'});
     // //check if year is current year
     const currentYear = new Date().toLocaleDateString('en', {year: '2-digit'});
-    // //if year is current year, don't display year
-    const lastMessageTimeFormatted = `${month} ${day} ${year === currentYear ? '' : `'${year}`}`;
+    //check if current month 
+    const currentMonth = new Date().toLocaleString('default', { month: 'short' });
+    const currentDay = new Date().getDate();
+
+    let lastMessageTimeFormatted = '';
+    if(year === currentYear){
+        if(month === currentMonth && day === currentDay){
+            lastMessageTimeFormatted = lastMessageTime.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+        } else {
+            lastMessageTimeFormatted = `${month} ${day}`;
+        }
+    } else {
+        lastMessageTimeFormatted = `${month}/${day}/${year}`;
+    }
 
     if(!receiver || !isAuthenticated || !receiver.profile_image){
         return <div>Loading...</div>
