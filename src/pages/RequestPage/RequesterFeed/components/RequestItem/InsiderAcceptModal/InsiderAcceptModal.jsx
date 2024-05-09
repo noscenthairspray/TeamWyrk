@@ -5,7 +5,7 @@ import { ReactComponent as LinkedInLogo } from "./LinkedInLogo.svg";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../../../firebase";
 import { useEffect, useState } from "react";
-import { doc, getDoc, updateDoc, update, ref } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, update, ref } from "firebase/firestore";
 import DeclinedEmailTemplate from "./DeclinedEmailTemplate";
 import AcceptanceEmailTemplate from "./AcceptanceEmailTemplate";
 import { FirebaseError } from "firebase/app";
@@ -38,8 +38,8 @@ const InsiderAcceptModal = ({
 }) => {
   // State to hold the Insider's info (includes email, name, profile image, role)
   const [insiderInfo, setInsiderInfo] = useState([]);
-  console.log(requestData);
-  console.log(insiderID);
+  // console.log(requestData);
+  // console.log(insiderID);
 
   // apply capitalization to service from backend for viewing correctly on the frontend
   //split by hyphen and capitalize each word function
@@ -72,7 +72,8 @@ const InsiderAcceptModal = ({
   const createConversation = async () => {
 
     //create a new conversation document with a unique id
-    const conversationRef = collection(db, "conversation");
+    const conversationRef = collection(db, "conversations");
+    console.log(conversationRef);
     const newConversation = await addDoc(conversationRef, {
       messages: [],
     });
@@ -97,13 +98,32 @@ const InsiderAcceptModal = ({
       receiverRelationship: `Requester for a ${service}`,
     };
 
-    //update the conversation log for the requester
-    
+    const usersArray = [{uid: requestData.uid, conversationLog: conversationLogForRequester}, {uid: insiderID, conversationLog: conversationLogForInsider}];
+
+
+    for(const user of usersArray){
+      const userConversationRef = doc(db, "userConversationLogs", user.uid);
+      const userConversationSnap = await getDoc(userConversationRef);
+      if(userConversationSnap.exists()){
+        const userConversationData = userConversationSnap.data();
+        const updatedConversationLog = [...userConversationData.conversations, user.conversationLog];
+        await updateDoc(userConversationRef, {
+          conversations: updatedConversationLog,
+        });
+      }
+      else{
+        //create a new userConversationLog for the requester
+        await setDoc(userConversationRef, {
+          conversations: [user.conversationLog],
+        });
+      }
+    }
   };
 
   // Function updates the status on the request document in firestore
   // Also, sends email to the matched insider to complete service
   const updateRequestInsiderStatus = async () => {
+    //uncommenting for testing createConversation function
     const emailTemplate = AcceptanceEmailTemplate(
       requestData,
       insiderInfo.name,
@@ -124,8 +144,14 @@ const InsiderAcceptModal = ({
       )
       .then(setRequestStatus("matched"))
       .then(setOpenAcceptModal(false));
-    // console.log("This is the updated status: matched");
-    await createConversation();
+    console.log("This is the updated status: matched");
+    
+    try{
+      await createConversation();
+    }
+    catch(error){
+      console.error("Error creating conversation: ", error);
+    }
 
   };
 

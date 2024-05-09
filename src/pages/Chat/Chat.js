@@ -8,7 +8,7 @@ import SideBar from "./components/SideBar";
 
 import { useEffect } from "react";
 
-import {conversations} from "./mockData"; //mock data for testing front end
+// import {conversations} from "./mockData"; //mock data for testing front end
 import ChatBox from "./components/ChatBox";
 
 import {collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -22,37 +22,42 @@ const Chat = () => {
     //testing a message not selected
     const [testSelectedConversation, setTestSelectedConversation] = useState(null);
 
-
+    const [conversations, setConversations] = useState(null);
     const [selectedConversation, setSelectedConversation] = useState(null);
     
     //getting the number of unread messages
     let unreadMessages = 0;
-    conversations.forEach((conversation) => {
-        if(!conversation.lastMessageRead){
-            unreadMessages++;
-        }
-    });
+    // conversations.forEach((conversation) => {
+    //     if(!conversation.lastMessageRead){
+    //         unreadMessages++;
+    //     }
+    // });
     const [numUnreadMessages, setNumUnreadMessages] = useState(unreadMessages);
 
     useEffect(() => {
+        if(!isAuthenticated){
+            return;
+        }
 
         async function fetchUserConversations() {
             const userConversationLogsRef = collection(db, "userConversationLogs");
             const userConversationLogDocRef = doc(userConversationLogsRef, user.uid);
             const docSnap = await getDoc(userConversationLogDocRef);
+            let data = null;
             if (docSnap.exists()) {
-                const data = docSnap.data();
+                data = docSnap.data();
                 console.log("data: ", data);
-                //setConversations(data.conversations);
+                
             }
             else {
-                const data = await setDoc(userConversationLogDocRef, {
+                data = await setDoc(userConversationLogDocRef, {
                     conversations: [],
                 });
                 console.log("data: ", data);
                 console.log("userConversations doc created");
-                setTestSelectedConversation(data);
+                // setTestSelectedConversation(data);
             }
+            setConversations(data.conversations);
         }
         fetchUserConversations();
       
@@ -63,6 +68,10 @@ const Chat = () => {
 
     if (!isAuthenticated) {
         return <Navigate replace to="/" />;
+    }
+
+    if (!conversations) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -77,7 +86,7 @@ const Chat = () => {
                     selectedConversation={selectedConversation}
                     setSelectedConversation={setSelectedConversation}
                 />
-                <ChatBox messages={selectedConversation}/>
+                {/* <ChatBox messages={selectedConversation}/> */}
             </div>
         </div>
 )

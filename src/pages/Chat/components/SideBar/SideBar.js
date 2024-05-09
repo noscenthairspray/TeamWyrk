@@ -3,7 +3,7 @@ import ConversationCard from "./ConversationCard";
 
 const SideBar = ({conversations, selectedConversation, setSelectedConversation}) => {
 
-  // const click = (conversation) => {
+  console.log(conversations);
 
   return (
     <aside className={styles.sideBarWrapper}>
