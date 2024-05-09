@@ -12,7 +12,7 @@ const ChatBox = ({messages}) => {
 
   return (
     <div className={styles.chatBoxWrapper}>
-        {JSON.stringify(messages)}
+        <pre>{JSON.stringify(messages, null, 2)}</pre>
     </div>
   )
 }

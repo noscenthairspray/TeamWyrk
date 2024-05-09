@@ -65,7 +65,7 @@ const Chat = () => {
         }
         fetchUserConversations();
       
-    }, [user.uid])
+    }, [user, isAuthenticated])
     if (!isAuthenticated) {
         return <Navigate replace to="/" />;
     }

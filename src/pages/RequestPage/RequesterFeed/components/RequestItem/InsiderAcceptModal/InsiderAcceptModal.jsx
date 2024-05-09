@@ -73,40 +73,31 @@ const InsiderAcceptModal = ({
 
     //create a new conversation document with a unique id
     const conversationRef = collection(db, "conversations");
-    console.log(conversationRef);
     const newConversation = await addDoc(conversationRef, {
       messages: [],
     });
 
-    console.log("New conversation created with ID: ", newConversation.id);
-
-    const conversationLogForRequester = {
-      conversationID: newConversation.id,
-      lastMessage: "",
-      receiverID: insiderID,
-      updatedAt: new Date(),
-      lastMessageRead: false,
-      receiverRelationship: `Insider for a ${service}`,
-    };
-
-    const conversationLogForInsider = {
-      conversationID: newConversation.id,
-      lastMessage: "",
-      receiverID: requestData.uid,
-      updatedAt: new Date(),
-      lastMessageRead: false,
-      receiverRelationship: `Requester for a ${service}`,
-    };
-
-    const usersArray = [{uid: requestData.uid, conversationLog: conversationLogForRequester}, {uid: insiderID, conversationLog: conversationLogForInsider}];
+    const usersArray = [
+      {uid: requestData.uid, receiverID: insiderID, relationship: "Insider"}, {uid: insiderID, receiverID: requestData.uid, relationship: "Requester"}
+    ];
 
 
     for(const user of usersArray){
+      //create a new conversationLog for the the user (requester/insider)
+      const conversationLog = {
+        conversationID: newConversation.id,
+        lastMessage: "",
+        receiverID: user.receiverID,
+        updatedAt: new Date(),
+        lastMessageRead: false,
+        receiverRelationship: `${user.relationship} for a ${service}`,
+      }
+
       const userConversationRef = doc(db, "userConversationLogs", user.uid);
       const userConversationSnap = await getDoc(userConversationRef);
       if(userConversationSnap.exists()){
         const userConversationData = userConversationSnap.data();
-        const updatedConversationLog = [...userConversationData.conversations, user.conversationLog];
+        const updatedConversationLog = [...userConversationData.conversations, conversationLog];
         await updateDoc(userConversationRef, {
           conversations: updatedConversationLog,
         });
@@ -114,7 +105,7 @@ const InsiderAcceptModal = ({
       else{
         //create a new userConversationLog for the requester
         await setDoc(userConversationRef, {
-          conversations: [user.conversationLog],
+          conversations: [conversationLog],
         });
       }
     }
