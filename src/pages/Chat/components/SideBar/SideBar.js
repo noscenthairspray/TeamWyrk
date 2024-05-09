@@ -1,9 +1,11 @@
 import styles from "./SideBar.module.css";
 import ConversationCard from "./ConversationCard";
 
-const SideBar = ({conversations, selectedConversation, setSelectedConversation}) => {
-
-  console.log(conversations);
+const SideBar = ({conversations}) => {
+  //order the conversations by date
+  conversations.sort((a, b) => {
+    return a.toDate() - b.toDate();
+  });
 
   return (
     <aside className={styles.sideBarWrapper}>
@@ -12,8 +14,6 @@ const SideBar = ({conversations, selectedConversation, setSelectedConversation})
               <ConversationCard 
                 conversation={conversation} 
                 key={index}
-                currentlyActive={selectedConversation === conversation} 
-                setSelectedConversation={setSelectedConversation}  
               />
             )}
         </div>
