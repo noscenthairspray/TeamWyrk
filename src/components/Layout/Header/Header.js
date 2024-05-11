@@ -91,6 +91,18 @@ const Header = () => {
                 {isMobile ? "Contact" : "Contact Us"}
               </a>
             </li>
+            {isAuthenticated && (
+                  <li>
+                    <NavLink
+                      to="/chat"
+                      style={({ isActive }) =>
+                        isActive ? activeStyle : undefined
+                      }
+                    >
+                      Chat
+                    </NavLink>
+                  </li>
+                )}
           </ul>
           {!isMobile && (
             <div className={styles.accessButtons}>

@@ -1,0 +1,9 @@
+.sideBarWrapper{
+    display: flex;
+    width: 349px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    /* to visualize for testing */
+    border: 1px solid green;
+}

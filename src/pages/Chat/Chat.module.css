@@ -1,0 +1,16 @@
+.container {
+    max-width: 1100px;
+    margin: 0px auto;
+  }
+  
+.title {
+    margin-top: 31px;
+    margin-bottom: 40px;
+}
+
+.sideAndBlobContainer{
+    display: flex;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+}
