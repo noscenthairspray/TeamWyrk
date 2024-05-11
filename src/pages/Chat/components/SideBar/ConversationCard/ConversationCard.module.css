@@ -1,0 +1,83 @@
+:root{
+    --blue-Fill: #EFF2FC;
+    --secondary: #DEDEDE;
+    --dark-blue-header: #222F65;
+    --light-grey: #515151;
+    --red: #D62B28;
+}
+.convoCard{
+    display: flex;
+    padding: 16px;
+    align-items: center;
+    align-items: center;
+    gap: 24px;
+    align-self: stretch;
+    cursor: pointer;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.convoCardActive{
+    background: var(--blue-Fill);
+    border-left: 6px solid var(--dark-blue-header);
+}
+
+.convoCard:hover{
+    background: var(--secondary);
+}
+
+.convoCardImage{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.convoCardInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    flex: 1 0 0;
+}
+
+.convoCardHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    align-self:stretch;
+}
+
+.convoCardName{
+    color: var(--dark-blue-header, #222F65);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "PT Sans";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px; /* 133.333% */
+}
+
+.convoCardHeaderInfo{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.convoCardTime{
+    color: var(--light-grey, #515151);
+    font-feature-settings: 'clig' off, 'liga' off;
+
+    /* Body 1 */
+    font-family: "PT Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%; /* 20px */
+}
+
+.convoCardNotification{
+    width: 8px;
+    height: 8px;
+    border-radius: 100px;
+    background: var(--red, #D62B28);
+}

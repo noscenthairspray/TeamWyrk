@@ -1,12 +1,14 @@
 import styles from "./InsiderAcceptModal.module.css";
 import { ReactComponent as Avatar } from "./Avatar.svg";
+import AvatarSVGWithImage from "./AvatarSVGWithImage";
 import { ReactComponent as LinkedInLogo } from "./LinkedInLogo.svg";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../../../firebase";
 import { useEffect, useState } from "react";
-import { doc, getDoc, updateDoc, update, ref } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, update, ref } from "firebase/firestore";
 import DeclinedEmailTemplate from "./DeclinedEmailTemplate";
 import AcceptanceEmailTemplate from "./AcceptanceEmailTemplate";
+import { FirebaseError } from "firebase/app";
 
 // import { Block } from "@mui/icons-material";
 
@@ -36,25 +38,20 @@ const InsiderAcceptModal = ({
 }) => {
   // State to hold the Insider's info (includes email, name, profile image, role)
   const [insiderInfo, setInsiderInfo] = useState([]);
+  // console.log(requestData);
+  // console.log(insiderID);
 
   // apply capitalization to service from backend for viewing correctly on the frontend
-  let service = ''
-  switch(requestData.services){
-    case "career-coaching": {
-      service = "Career Coaching";
-      break;
-    }
-    case "resume-review":{
-      service = "Resume Review";
-      break;
-    }
-    case "referral":{
-      service = "Referral";
-      break;
-    }
-    default:
-      break;
-    }
+  //split by hyphen and capitalize each word function
+  const capitalize = (str) => {
+    return str
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  let service = capitalize(requestData.services);
+  // console.log(service);
 
   /** Effect hook to get the Insider's info from Firebase using the Insider's ID prop */
   useEffect(() => {
@@ -72,9 +69,52 @@ const InsiderAcceptModal = ({
     }
   }, []);
 
+  const createConversation = async () => {
+
+    //create a new conversation document with a unique id
+    const conversationRef = collection(db, "conversations");
+    const newConversation = await addDoc(conversationRef, {
+      messages: [],
+    });
+
+    const usersArray = [
+      {uid: requestData.uid, receiverID: insiderID, relationship: "Insider"}, {uid: insiderID, receiverID: requestData.uid, relationship: "Requester"}
+    ];
+
+
+    for(const user of usersArray){
+      //create a new conversationLog for the the user (requester/insider)
+      const conversationLog = {
+        conversationID: newConversation.id,
+        lastMessage: "",
+        receiverID: user.receiverID,
+        updatedAt: new Date(),
+        lastMessageRead: false,
+        receiverRelationship: `${user.relationship} for a ${service}`,
+      }
+
+      const userConversationRef = doc(db, "userConversationLogs", user.uid);
+      const userConversationSnap = await getDoc(userConversationRef);
+      if(userConversationSnap.exists()){
+        const userConversationData = userConversationSnap.data();
+        const updatedConversationLog = [...userConversationData.conversations, conversationLog];
+        await updateDoc(userConversationRef, {
+          conversations: updatedConversationLog,
+        });
+      }
+      else{
+        //create a new userConversationLog for the requester
+        await setDoc(userConversationRef, {
+          conversations: [conversationLog],
+        });
+      }
+    }
+  };
+
   // Function updates the status on the request document in firestore
   // Also, sends email to the matched insider to complete service
   const updateRequestInsiderStatus = async () => {
+    //uncommenting for testing createConversation function
     const emailTemplate = AcceptanceEmailTemplate(
       requestData,
       insiderInfo.name,
@@ -95,7 +135,15 @@ const InsiderAcceptModal = ({
       )
       .then(setRequestStatus("matched"))
       .then(setOpenAcceptModal(false));
-    // console.log("This is the updated status: matched");
+    console.log("This is the updated status: matched");
+    
+    try{
+      await createConversation();
+    }
+    catch(error){
+      console.error("Error creating conversation: ", error);
+    }
+
   };
 
   /** Function to send an email everytime the decline button is clicked */
@@ -150,12 +198,13 @@ const InsiderAcceptModal = ({
           </div>
           <div className={styles.modal_body}>
             <div className={styles.image_container}>
-              <Avatar />
+              {/* <Avatar /> */}
+              <AvatarSVGWithImage imageURL={insiderInfo?.profile_image} />
             </div>
             <div className={styles.details_container}>
-              <div className={styles.name}>Abc Xyz</div>
-              <div className={styles.company_name}>Google</div>
-              <div className={styles.designation}>Product Manager</div>
+              <div className={styles.name}>{insiderInfo?.name}</div>
+              <div className={styles.company_name}>Your Desired Company: {requestData.desired_company}</div>
+              <div className={styles.designation}>Your Desired Role: {requestData.desired_role}</div>
               <div className={styles.social}>
                 <span>
                   <LinkedInLogo />

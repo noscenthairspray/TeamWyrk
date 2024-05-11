@@ -30,6 +30,8 @@ export const addRequestToDB = httpsCallable(functions, "addRequestToDB");
 export const signOut = async () => {
   try {
     await auth.signOut();
+    //missing or insufficient permissions error
+    //Uncaught Error in snapshot listener: FirebaseError: [code=permission-denied]: Missing or insufficient permissions.
     return true;
   } catch (error) {
     return false;
